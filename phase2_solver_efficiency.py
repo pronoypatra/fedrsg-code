@@ -82,6 +82,7 @@ def grid_br(util, a_lo, a_hi, eps_max, xi):
 
 def main():
     mc = MeasuredComp(DS, a_curr=A_CURR); A = MeasuredAccuracy(DS)
+    print(f"(smooth C^comp fit R^2 = {mc.r2_fit:.4f})")
     client = ClientCosts(gamma=1.5, delta=1.5, rho=0.0, a_curr=A_CURR,
                          comp="measured", comp_fn=mc.cost)
     P = pay.convex_payment(3, A_CURR); r = 2.0
