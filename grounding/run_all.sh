@@ -20,11 +20,13 @@ mkdir -p results logs
 DATASETS=(mnist cifar10 femnist adult)
 
 if [ "$MODE" = "smoke" ]; then
-  CEPOCHS=2; DPEPOCHS=1; EPS="1 4"; TAG="smoke"
+  # DP needs a few epochs to show it TRAINS (1 epoch can't distinguish fix from
+  # the earlier collapse); comp stays short.
+  CEPOCHS=3; DPEPOCHS=4; EPS="1 8"; TAG="smoke"
 else
   # per-dataset comp epochs; DP epochs shared
-  declare -A CE=( [mnist]=30 [cifar10]=60 [femnist]=40 [adult]=40 )
-  DPEPOCHS=15; EPS="0.5 1 2 4 8"; TAG="full"
+  declare -A CE=( [mnist]=30 [cifar10]=80 [femnist]=40 [adult]=40 )
+  DPEPOCHS=20; EPS="0.5 1 2 4 8"; TAG="full"
 fi
 
 run() {  # run <name> <command...>

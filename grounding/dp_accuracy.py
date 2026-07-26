@@ -36,13 +36,17 @@ except Exception as e:                                 # pragma: no cover
 def train_dp(dataset, target_eps, epochs, batch, lr, root, delta, max_grad_norm, workers=0):
     device = device_str()
     print(f"[{dataset} eps~{target_eps}] device={device}, loading data...", flush=True)
-    tr, te, meta = get_dataset(dataset, root)
+    tr, te, meta = get_dataset(dataset, root, augment=False)   # no aug under DP
     trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=workers)
     tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=workers)
 
     model = build_model(meta).to(device)
-    model = ModuleValidator.fix(model)                 # ensure DP-compatible layers
-    opt = torch.optim.SGD(model.parameters(), lr=lr, momentum=0.9)
+    if not ModuleValidator.is_valid(model):            # fix DP-incompatible layers
+        model = ModuleValidator.fix(model)
+    model = model.to(device)
+    # standard DP-SGD uses plain SGD (no momentum): per-sample clipping + momentum
+    # interact poorly and momentum is not accounted for in the privacy analysis.
+    opt = torch.optim.SGD(model.parameters(), lr=lr)
 
     engine = PrivacyEngine()
     model, opt, trl = engine.make_private_with_epsilon(
@@ -55,7 +59,8 @@ def train_dp(dataset, target_eps, epochs, batch, lr, root, delta, max_grad_norm,
         for x, y in trl:
             x, y = x.to(device), y.to(device)
             opt.zero_grad(); F.cross_entropy(model(x), y).backward(); opt.step()
-        print(f"  [{dataset} eps~{target_eps}] epoch {ep}/{epochs}", flush=True)
+        print(f"  [{dataset} eps~{target_eps}] epoch {ep}/{epochs}  "
+              f"eps_so_far={engine.get_epsilon(delta):.2f}", flush=True)
 
     return engine.get_epsilon(delta), test_acc(model, tel, device)
 
@@ -64,9 +69,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dataset", required=True)
     ap.add_argument("--epsilons", type=float, nargs="+", default=[0.5, 1, 2, 4, 8])
-    ap.add_argument("--epochs", type=int, default=15)
-    ap.add_argument("--batch", type=int, default=256)
-    ap.add_argument("--lr", type=float, default=0.5)
+    ap.add_argument("--epochs", type=int, default=20)
+    # DP-SGD signal-to-noise improves with LARGE batches; LR too high causes the
+    # noisy updates to diverge (the MNIST eps=1 -> 0.13 collapse we saw). Larger
+    # batch + lower LR stabilizes training.
+    ap.add_argument("--batch", type=int, default=1024)
+    ap.add_argument("--lr", type=float, default=0.1)
     ap.add_argument("--delta", type=float, default=1e-5)
     ap.add_argument("--max-grad-norm", type=float, default=1.0)
     ap.add_argument("--root", default="./data")

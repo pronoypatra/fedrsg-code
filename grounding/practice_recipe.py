@@ -52,21 +52,24 @@ def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
     """
     device = device_str()
     tr, te, meta = get_dataset(dataset, root)
-    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=2)
+    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=0)
     model = build_model(meta).to(device)
 
     engine = None
-    opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
-    trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=2)
+    trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=0)
     if eps is not None:
         from opacus import PrivacyEngine
         from opacus.validators import ModuleValidator
-        model = ModuleValidator.fix(model)
-        opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
+        if not ModuleValidator.is_valid(model):
+            model = ModuleValidator.fix(model)
+        model = model.to(device)
+        opt = torch.optim.SGD(model.parameters(), lr=lr1)   # DP-SGD: no momentum
         engine = PrivacyEngine()
         model, opt, trl = engine.make_private_with_epsilon(
             module=model, optimizer=opt, data_loader=trl, target_epsilon=eps,
             target_delta=delta, epochs=max_epochs, max_grad_norm=max_grad_norm)
+    else:
+        opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
 
     # track the checkpoint whose HELD-OUT accuracy is closest to target
     best = {"err": float("inf"), "state": None, "acc": 0.0}

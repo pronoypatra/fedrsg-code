@@ -29,6 +29,8 @@ def main():
     ap.add_argument("--epochs", type=int, default=30)
     ap.add_argument("--batch", type=int, default=128)
     ap.add_argument("--lr", type=float, default=0.05)
+    ap.add_argument("--weight-decay", type=float, default=5e-4,
+                    help="L2 regularization; helps CIFAR avoid late overfitting")
     ap.add_argument("--root", default="./data")
     ap.add_argument("--workers", type=int, default=0,
                     help="DataLoader workers; 0 avoids multiprocessing hangs")
@@ -43,7 +45,12 @@ def main():
     tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=args.workers)
 
     model = build_model(meta).to(device)
-    opt = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)
+    opt = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9,
+                          weight_decay=args.weight_decay)
+    # cosine LR decay to ~0 over training: makes accuracy climb to a stable plateau
+    # instead of diverging late (the CIFAR peak-then-decline we saw). Monotone
+    # C^comp(a) requires this.
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=args.epochs)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", newline="") as fh:
@@ -54,9 +61,11 @@ def main():
             for x, y in trl:
                 x, y = x.to(device), y.to(device)
                 opt.zero_grad(); F.cross_entropy(model(x), y).backward(); opt.step()
+            sched.step()
             a = test_acc(model, tel, device)
             w.writerow([ep, a]); fh.flush()
-            print(f"[{args.dataset}] epoch {ep:3d}  test_acc {a:.4f}", flush=True)
+            print(f"[{args.dataset}] epoch {ep:3d}  test_acc {a:.4f}  "
+                  f"lr {opt.param_groups[0]['lr']:.4f}", flush=True)
     print(f"wrote {args.out}")
 
 
