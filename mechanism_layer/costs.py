@@ -65,11 +65,15 @@ class ClientCosts:
     delta: float = 1.0          # privacy weight
     rho: float = 0.0            # data-collection weight (0 => F inactive)
     a_curr: float = 0.5
-    comp: str = "log"           # "log" | "rational"
+    comp: str = "log"           # "log" | "rational" | "measured"
     priv: str = "linear"        # "linear" | "quadratic"
     coll: str = "exp"           # "exp" | "linear"
+    comp_fn: object = None      # callable C^comp(a); overrides `comp` when set
+                                # (used for the MEASURED oracle, measured.MeasuredComp.cost)
 
     def _comp(self, a: float) -> float:
+        if self.comp_fn is not None:
+            return float(self.comp_fn(a))
         return comp_cost_log(a, self.a_curr) if self.comp == "log" else comp_cost_rational(a, self.a_curr)
 
     def _priv(self, eps: float) -> float:

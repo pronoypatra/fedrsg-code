@@ -18,4 +18,7 @@ results/
 !grounding/fitted/*.png
 !grounding/fitted/*.pdf
 !grounding/fitted/*.json
+# Phase-2 mechanism-layer outputs travel back from wherever the runner is executed.
+!results_phase2/
+!results_phase2/*.json
 # figures/*.pdf are tracked (default) — they go into the paper.
