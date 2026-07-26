@@ -1,20 +1,31 @@
 """
-Phase-3: translate an equilibrium target (a*, eps*) into real training knobs.
+Phase-3: translate an equilibrium target a* into real training -- APPROXIMATELY,
+and report the residual honestly.
 
-The equilibrium solver returns a target accuracy a* (and privacy level eps*).  A
-client must actually TRAIN a model that lands at a*.  We demonstrate the two-phase
-accuracy-targeting recipe from the paper:
+Framing (deliberate).  Hitting a specific accuracy exactly is genuinely hard:
+accuracy rises very fast early (MNIST/CIFAR reach high accuracy within an epoch)
+and then flattens near the ceiling, so a target in the steep region is easy to
+overshoot and a target near the plateau is hard to stop below.  We therefore do
+NOT claim exact control.  We show two things instead:
+  1. a client can get CLOSE to a* with a simple recipe, and we report the achieved
+     accuracy and the residual |achieved - a*| honestly (never hidden);
+  2. the mechanism is ROBUST to that residual: because a* maximizes the client's
+     utility, dU/da = 0 there, so a small miss Delta_a costs only O(Delta_a^2) in
+     utility -- an approximate landing is near-optimal on the equilibrium.
+The comp_cost.py epochs->accuracy curve is the primary "realizable in practice"
+evidence; this script quantifies how close the recipe lands and the utility gap.
 
-  Phase 1 (coarse alignment): train at a high LR / large batch, tracking an EMA of
-    per-batch accuracy, until the EMA reaches (ema_frac * target).
-  Phase 2 (fine tuning): drop the LR, shrink the batch, continue until the EMA is
-    within +/- tol of the target; checkpoint periodically and finally pick the
-    checkpoint whose held-out accuracy is closest to the target.
+Recipe (best-effort landing, tuned for the steep regime):
+  Phase 1 (coarse): high LR, evaluate HELD-OUT accuracy every `eval_every` batches
+    (SUB-EPOCH, so we do not blow past a low target within one epoch); stop once
+    held-out accuracy reaches ema_frac * target.
+  Phase 2 (fine): drop LR; keep evaluating sub-epoch, checkpoint the closest-to-
+    target model on HELD-OUT data (not the optimistic training signal), stop within
+    +/- tol; restore that best checkpoint at the end.
 
-Optionally applies DP-SGD at a target eps* (so the recipe works in the private
-regime too).
+Optionally applies DP-SGD at a target eps* (private regime).
 
-Output CSV schema:  target_acc,achieved_acc,phase1_epochs,phase2_epochs,realized_eps
+Output CSV schema:  target_acc,achieved_acc,abs_err,phase1_steps,phase2_steps,realized_eps
 
 Run (on GPU server):
   python practice_recipe.py --dataset mnist --targets 0.90 0.95 0.97 --out results/practice_mnist.csv
@@ -29,73 +40,70 @@ from torch.utils.data import DataLoader
 from common import get_dataset, build_model, test_acc, device_str
 
 
-def _batch_acc(logits, y):
-    return (logits.argmax(1) == y).float().mean().item()
+import copy
 
 
-def train_to_target(dataset, target, root, max_epochs, batch1, batch2,
-                    lr1, lr2, ema_coef, ema_frac, tol, eps, delta, max_grad_norm):
+def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
+                    eval_every, ema_frac, tol, eps, delta, max_grad_norm):
+    """Best-effort landing at `target`, deciding on HELD-OUT accuracy, sub-epoch.
+
+    Returns (achieved_acc, phase1_steps, phase2_steps, realized_eps) where
+    achieved is the held-out accuracy of the closest checkpoint to `target`.
+    """
     device = device_str()
     tr, te, meta = get_dataset(dataset, root)
     tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=2)
     model = build_model(meta).to(device)
 
-    # optional DP
     engine = None
+    opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
+    trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=2)
     if eps is not None:
         from opacus import PrivacyEngine
         from opacus.validators import ModuleValidator
         model = ModuleValidator.fix(model)
         opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
-        trl = DataLoader(tr, batch_size=batch1, shuffle=True, num_workers=2)
         engine = PrivacyEngine()
         model, opt, trl = engine.make_private_with_epsilon(
             module=model, optimizer=opt, data_loader=trl, target_epsilon=eps,
             target_delta=delta, epochs=max_epochs, max_grad_norm=max_grad_norm)
-    else:
-        opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
-        trl = DataLoader(tr, batch_size=batch1, shuffle=True, num_workers=2)
 
-    ema = None
-    def run_phase(loader, optimizer, lr, stop_pred, budget):
-        nonlocal ema
-        for g in optimizer.param_groups:
-            g["lr"] = lr
-        used = 0
-        for ep in range(1, budget + 1):
-            model.train()
-            for x, y in loader:
-                x, y = x.to(device), y.to(device)
-                optimizer.zero_grad()
-                logits = model(x)
-                F.cross_entropy(logits, y).backward(); optimizer.step()
-                a = _batch_acc(logits, y)
-                ema = a if ema is None else (1 - ema_coef) * ema + ema_coef * a
-            used = ep
-            if stop_pred(ema):
-                break
-        return used
-
-    # Phase 1: coarse -- reach ema_frac * target
-    p1 = run_phase(trl, opt, lr1, lambda e: e >= ema_frac * target, max_epochs)
-
-    # Phase 2: fine -- within tol of target (smaller batch when not under DP;
-    # under DP we keep the privatized loader, only dropping the LR)
-    if eps is None:
-        trl2 = DataLoader(tr, batch_size=batch2, shuffle=True, num_workers=2)
-    else:
-        trl2 = trl
-    best = {"acc": test_acc(model, tel, device), "state": None}
-    def fine_stop(e):
-        # checkpoint the closest-so-far model to the target on held-out data
+    # track the checkpoint whose HELD-OUT accuracy is closest to target
+    best = {"err": float("inf"), "state": None, "acc": 0.0}
+    def _consider():
         acc = test_acc(model, tel, device)
-        if abs(acc - target) < abs(best["acc"] - target):
-            best["acc"] = acc
-        return abs(e - target) <= tol
-    p2 = run_phase(trl2, opt, lr2, fine_stop, max_epochs)
+        if abs(acc - target) < best["err"]:
+            best.update(err=abs(acc - target), acc=acc,
+                        state=copy.deepcopy(model.state_dict()))
+        return acc
 
-    achieved = min([test_acc(model, tel, device), best["acc"]],
-                   key=lambda a: abs(a - target))
+    def run_phase(lr, reach, budget):
+        """Train until held-out accuracy first reaches `reach` (or budget spent),
+        checking every `eval_every` optimizer steps. Returns steps used."""
+        for g in opt.param_groups:
+            g["lr"] = lr
+        steps = 0
+        for _ in range(budget):
+            model.train()
+            for x, y in trl:
+                x, y = x.to(device), y.to(device)
+                opt.zero_grad(); F.cross_entropy(model(x), y).backward(); opt.step()
+                steps += 1
+                if steps % eval_every == 0:
+                    acc = _consider()
+                    if acc >= reach:
+                        return steps
+        _consider()
+        return steps
+
+    # Phase 1 (coarse): reach ema_frac * target quickly
+    p1 = run_phase(lr1, ema_frac * target, max_epochs)
+    # Phase 2 (fine): low LR, land within tol of target
+    p2 = run_phase(lr2, target - tol, max_epochs)
+
+    if best["state"] is not None:                 # restore closest-to-target model
+        model.load_state_dict(best["state"])
+    achieved = best["acc"] if best["state"] is not None else test_acc(model, tel, device)
     realized = engine.get_epsilon(delta) if engine is not None else float("inf")
     return achieved, p1, p2, realized
 
@@ -108,12 +116,13 @@ def main():
     ap.add_argument("--eps", type=float, default=None, help="optional DP target eps*")
     ap.add_argument("--root", default="./data")
     ap.add_argument("--max-epochs", type=int, default=40)
-    ap.add_argument("--batch1", type=int, default=256)
-    ap.add_argument("--batch2", type=int, default=64)
+    ap.add_argument("--batch", type=int, default=128)
     ap.add_argument("--lr1", type=float, default=0.1)
     ap.add_argument("--lr2", type=float, default=0.01)
-    ap.add_argument("--ema-coef", type=float, default=0.1)
-    ap.add_argument("--ema-frac", type=float, default=0.8)
+    ap.add_argument("--eval-every", type=int, default=50,
+                    help="evaluate held-out accuracy every N optimizer steps (sub-epoch)")
+    ap.add_argument("--ema-frac", type=float, default=0.9,
+                    help="phase-1 stops at ema_frac*target on held-out")
     ap.add_argument("--tol", type=float, default=0.02)
     ap.add_argument("--delta", type=float, default=1e-5)
     ap.add_argument("--max-grad-norm", type=float, default=1.0)
@@ -123,13 +132,13 @@ def main():
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["target_acc", "achieved_acc", "phase1_epochs", "phase2_epochs", "realized_eps"])
+        w.writerow(["target_acc", "achieved_acc", "abs_err", "phase1_steps", "phase2_steps", "realized_eps"])
         for t in args.targets:
             ach, p1, p2, realized = train_to_target(
-                args.dataset, t, args.root, args.max_epochs, args.batch1, args.batch2,
-                args.lr1, args.lr2, args.ema_coef, args.ema_frac, args.tol,
+                args.dataset, t, args.root, args.max_epochs, args.batch,
+                args.lr1, args.lr2, args.eval_every, args.ema_frac, args.tol,
                 args.eps, args.delta, args.max_grad_norm)
-            w.writerow([t, ach, p1, p2, realized]); fh.flush()
+            w.writerow([t, ach, abs(ach - t), p1, p2, realized]); fh.flush()
             print(f"[{args.dataset}] target={t:.3f}  achieved={ach:.3f}  "
                   f"|err|={abs(ach-t):.3f}  p1={p1} p2={p2} eps={realized:.2f}", flush=True)
     print(f"wrote {args.out}")

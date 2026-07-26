@@ -30,13 +30,17 @@ def main():
     ap.add_argument("--batch", type=int, default=128)
     ap.add_argument("--lr", type=float, default=0.05)
     ap.add_argument("--root", default="./data")
+    ap.add_argument("--workers", type=int, default=0,
+                    help="DataLoader workers; 0 avoids multiprocessing hangs")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
     device = device_str()
+    print(f"[{args.dataset}] device={device}, loading data...", flush=True)
     tr, te, meta = get_dataset(args.dataset, args.root)
-    trl = DataLoader(tr, batch_size=args.batch, shuffle=True, num_workers=2)
-    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=2)
+    print(f"[{args.dataset}] data ready ({len(tr)} train), building model...", flush=True)
+    trl = DataLoader(tr, batch_size=args.batch, shuffle=True, num_workers=args.workers)
+    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=args.workers)
 
     model = build_model(meta).to(device)
     opt = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=0.9)

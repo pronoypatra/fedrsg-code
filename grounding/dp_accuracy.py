@@ -33,11 +33,12 @@ except Exception as e:                                 # pragma: no cover
     raise SystemExit("opacus required: pip install -r requirements-gpu.txt") from e
 
 
-def train_dp(dataset, target_eps, epochs, batch, lr, root, delta, max_grad_norm):
+def train_dp(dataset, target_eps, epochs, batch, lr, root, delta, max_grad_norm, workers=0):
     device = device_str()
+    print(f"[{dataset} eps~{target_eps}] device={device}, loading data...", flush=True)
     tr, te, meta = get_dataset(dataset, root)
-    trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=2)
-    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=2)
+    trl = DataLoader(tr, batch_size=batch, shuffle=True, num_workers=workers)
+    tel = DataLoader(te, batch_size=512, shuffle=False, num_workers=workers)
 
     model = build_model(meta).to(device)
     model = ModuleValidator.fix(model)                 # ensure DP-compatible layers
@@ -69,6 +70,8 @@ def main():
     ap.add_argument("--delta", type=float, default=1e-5)
     ap.add_argument("--max-grad-norm", type=float, default=1.0)
     ap.add_argument("--root", default="./data")
+    ap.add_argument("--workers", type=int, default=0,
+                    help="DataLoader workers; 0 avoids multiprocessing hangs")
     ap.add_argument("--out", required=True)
     args = ap.parse_args()
 
@@ -77,7 +80,8 @@ def main():
         w = csv.writer(fh); w.writerow(["target_eps", "realized_eps", "test_acc"])
         for te in args.epsilons:
             realized, acc = train_dp(args.dataset, te, args.epochs, args.batch,
-                                     args.lr, args.root, args.delta, args.max_grad_norm)
+                                     args.lr, args.root, args.delta, args.max_grad_norm,
+                                     args.workers)
             w.writerow([te, realized, acc]); fh.flush()
             print(f"[{args.dataset}] target_eps={te}  realized_eps={realized:.3f}  "
                   f"test_acc={acc:.4f}", flush=True)
