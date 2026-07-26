@@ -5,12 +5,13 @@
 # back.
 #
 # Usage:
-#   bash run_all.sh smoke     # ~2 min: tiny runs on every dataset to catch errors
-#   bash run_all.sh full      # the real runs (hours)
-#   bash run_all.sh dp        # only the DP-SGD runs (if comp already done)
+#   bash run_all.sh smoke      # ~5 min: tiny runs on every dataset to catch errors
+#   bash run_all.sh full       # the real runs (hours): comp + dp
+#   bash run_all.sh full-comp  # only the COMPUTATION-cost runs (ready to go now)
+#   bash run_all.sh full-dp    # only the DP-SGD runs
 #
 # Recommended:  ALWAYS run `smoke` first.  If it finishes with all CSVs present
-# and non-trivial accuracies, THEN launch `full` under tmux and walk away.
+# and non-trivial accuracies, THEN launch the full runs under tmux and walk away.
 
 set -uo pipefail
 MODE="${1:-smoke}"
@@ -23,13 +24,19 @@ DATASETS=(mnist cifar10 femnist adult)
 # sampling to resolve the 0.3-0.9 accuracy range before it saturates.
 declare -A EV=( [mnist]=20 [cifar10]=100 [femnist]=30 [adult]=10 )
 
+# which stages to run for this mode
+DO_COMP=1; DO_DP=1
 if [ "$MODE" = "smoke" ]; then
-  # DP needs a few epochs to show it TRAINS; comp stays short but sub-epoch eval
-  # already resolves the curve within those epochs.
   CEPOCHS=3; DPEPOCHS=4; EPS="1 8"; TAG="smoke"
 else
   declare -A CE=( [mnist]=30 [cifar10]=80 [femnist]=40 [adult]=40 )
-  DPEPOCHS=20; EPS="0.5 1 2 4 8"; TAG="full"
+  DPEPOCHS=20; EPS="0.5 1 2 4 8"; TAG="$MODE"
+  case "$MODE" in
+    full)      : ;;                         # comp + dp
+    full-comp) DO_DP=0 ;;                   # comp only (ready now)
+    full-dp)   DO_COMP=0 ;;                 # dp only
+    *) echo "unknown mode: $MODE (use smoke|full|full-comp|full-dp)"; exit 1 ;;
+  esac
 fi
 
 run() {  # run <name> <command...>
@@ -46,10 +53,14 @@ echo "=== run_all.sh MODE=$MODE  start $(date) ===" | tee -a "logs/${TAG}.log"
 
 for ds in "${DATASETS[@]}"; do
   if [ "$MODE" = "smoke" ]; then ce=$CEPOCHS; else ce=${CE[$ds]}; fi
-  run "comp_${ds}" $PY comp_cost.py --dataset "$ds" --epochs "$ce" \
-      --eval-every "${EV[$ds]}" --out "results/comp_${ds}.csv"
-  run "dp_${ds}"   $PY dp_accuracy.py --dataset "$ds" --epsilons $EPS \
-      --epochs "$DPEPOCHS" --out "results/dp_${ds}.csv"
+  if [ "$DO_COMP" = "1" ]; then
+    run "comp_${ds}" $PY comp_cost.py --dataset "$ds" --epochs "$ce" \
+        --eval-every "${EV[$ds]}" --out "results/comp_${ds}.csv"
+  fi
+  if [ "$DO_DP" = "1" ]; then
+    run "dp_${ds}"   $PY dp_accuracy.py --dataset "$ds" --epsilons $EPS \
+        --epochs "$DPEPOCHS" --out "results/dp_${ds}.csv"
+  fi
 done
 
 echo "=== done $(date).  CSVs in results/  ===" | tee -a "logs/${TAG}.log"
