@@ -41,3 +41,9 @@ wrote results/comp_mnist.csv
 [mnist] epoch  29  test_acc 0.9937
 [mnist] epoch  30  test_acc 0.9938
 wrote results/comp_mnist.csv
+[mnist] device=cuda, loading data...
+[mnist] data ready (60000 train), building model...
+[mnist] epoch   1  test_acc 0.9873  lr 0.0375
+[mnist] epoch   2  test_acc 0.9887  lr 0.0125
+[mnist] epoch   3  test_acc 0.9916  lr 0.0000
+wrote results/comp_mnist.csv

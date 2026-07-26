@@ -45,3 +45,9 @@ wrote results/comp_femnist.csv
 [femnist] epoch  39  test_acc 0.8523
 [femnist] epoch  40  test_acc 0.8490
 wrote results/comp_femnist.csv
+[femnist] device=cuda, loading data...
+[femnist] data ready (112800 train), building model...
+[femnist] epoch   1  test_acc 0.8499  lr 0.0375
+[femnist] epoch   2  test_acc 0.8520  lr 0.0125
+[femnist] epoch   3  test_acc 0.8754  lr 0.0000
+wrote results/comp_femnist.csv
