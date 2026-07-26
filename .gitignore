@@ -12,4 +12,10 @@ results/
 !grounding/logs/*.log
 # Raster previews are regenerable; keep only the vector PDFs (used in the paper).
 *.png
+# ...except the fitted-oracle grounding figures, so they travel back from wherever
+# fit_oracles.py is run.
+!grounding/fitted/
+!grounding/fitted/*.png
+!grounding/fitted/*.pdf
+!grounding/fitted/*.json
 # figures/*.pdf are tracked (default) — they go into the paper.
