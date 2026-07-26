@@ -57,3 +57,46 @@ wrote results/comp_femnist.csv
 [femnist] epoch   2  step 1764  test_acc 0.8571  lr 0.0125
 [femnist] epoch   3  step 2646  test_acc 0.8799  lr 0.0000
 wrote results/comp_femnist.csv
+[femnist] device=cuda, loading data...
+[femnist] data ready (112800 train), building model...
+[femnist] epoch   1  step 882  test_acc 0.8403  lr 0.0499
+[femnist] epoch   2  step 1764  test_acc 0.8537  lr 0.0497
+[femnist] epoch   3  step 2646  test_acc 0.8571  lr 0.0493
+[femnist] epoch   4  step 3528  test_acc 0.8651  lr 0.0488
+[femnist] epoch   5  step 4410  test_acc 0.8670  lr 0.0481
+[femnist] epoch   6  step 5292  test_acc 0.8739  lr 0.0473
+[femnist] epoch   7  step 6174  test_acc 0.8684  lr 0.0463
+[femnist] epoch   8  step 7056  test_acc 0.8715  lr 0.0452
+[femnist] epoch   9  step 7938  test_acc 0.8717  lr 0.0440
+[femnist] epoch  10  step 8820  test_acc 0.8708  lr 0.0427
+[femnist] epoch  11  step 9702  test_acc 0.8676  lr 0.0412
+[femnist] epoch  12  step 10584  test_acc 0.8694  lr 0.0397
+[femnist] epoch  13  step 11466  test_acc 0.8736  lr 0.0381
+[femnist] epoch  14  step 12348  test_acc 0.8700  lr 0.0363
+[femnist] epoch  15  step 13230  test_acc 0.8693  lr 0.0346
+[femnist] epoch  16  step 14112  test_acc 0.8727  lr 0.0327
+[femnist] epoch  17  step 14994  test_acc 0.8690  lr 0.0308
+[femnist] epoch  18  step 15876  test_acc 0.8710  lr 0.0289
+[femnist] epoch  19  step 16758  test_acc 0.8726  lr 0.0270
+[femnist] epoch  20  step 17640  test_acc 0.8713  lr 0.0250
+[femnist] epoch  21  step 18522  test_acc 0.8744  lr 0.0230
+[femnist] epoch  22  step 19404  test_acc 0.8710  lr 0.0211
+[femnist] epoch  23  step 20286  test_acc 0.8729  lr 0.0192
+[femnist] epoch  24  step 21168  test_acc 0.8730  lr 0.0173
+[femnist] epoch  25  step 22050  test_acc 0.8711  lr 0.0154
+[femnist] epoch  26  step 22932  test_acc 0.8710  lr 0.0137
+[femnist] epoch  27  step 23814  test_acc 0.8718  lr 0.0119
+[femnist] epoch  28  step 24696  test_acc 0.8764  lr 0.0103
+[femnist] epoch  29  step 25578  test_acc 0.8785  lr 0.0088
+[femnist] epoch  30  step 26460  test_acc 0.8761  lr 0.0073
+[femnist] epoch  31  step 27342  test_acc 0.8732  lr 0.0060
+[femnist] epoch  32  step 28224  test_acc 0.8745  lr 0.0048
+[femnist] epoch  33  step 29106  test_acc 0.8749  lr 0.0037
+[femnist] epoch  34  step 29988  test_acc 0.8752  lr 0.0027
+[femnist] epoch  35  step 30870  test_acc 0.8754  lr 0.0019
+[femnist] epoch  36  step 31752  test_acc 0.8743  lr 0.0012
+[femnist] epoch  37  step 32634  test_acc 0.8752  lr 0.0007
+[femnist] epoch  38  step 33516  test_acc 0.8742  lr 0.0003
+[femnist] epoch  39  step 34398  test_acc 0.8758  lr 0.0001
+[femnist] epoch  40  step 35280  test_acc 0.8758  lr 0.0000
+wrote results/comp_femnist.csv

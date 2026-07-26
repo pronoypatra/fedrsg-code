@@ -143,3 +143,187 @@ sys:1: UserWarning: Full backward hook is firing when gradients are computed wit
   [cifar10 eps~8.0] epoch 4/4  eps_so_far=7.99
 [cifar10] target_eps=8.0  realized_eps=7.993  test_acc=0.3023
 wrote results/dp_cifar10.csv
+[cifar10 eps~0.1] device=cuda, loading data...
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/torchvision/datasets/cifar.py:83: VisibleDeprecationWarning: dtype(): align should be passed as Python or NumPy boolean but got `align=0`. Did you mean to pass a tuple to create a subarray type? (Deprecated NumPy 2.4)
+  entry = pickle.load(f, encoding="latin1")
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/privacy_engine.py:98: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the largest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  [cifar10 eps~0.1] epoch 1/20  eps_so_far=0.03
+  [cifar10 eps~0.1] epoch 2/20  eps_so_far=0.03
+  [cifar10 eps~0.1] epoch 3/20  eps_so_far=0.04
+  [cifar10 eps~0.1] epoch 4/20  eps_so_far=0.05
+  [cifar10 eps~0.1] epoch 5/20  eps_so_far=0.05
+  [cifar10 eps~0.1] epoch 6/20  eps_so_far=0.05
+  [cifar10 eps~0.1] epoch 7/20  eps_so_far=0.06
+  [cifar10 eps~0.1] epoch 8/20  eps_so_far=0.06
+  [cifar10 eps~0.1] epoch 9/20  eps_so_far=0.07
+  [cifar10 eps~0.1] epoch 10/20  eps_so_far=0.07
+  [cifar10 eps~0.1] epoch 11/20  eps_so_far=0.07
+  [cifar10 eps~0.1] epoch 12/20  eps_so_far=0.08
+  [cifar10 eps~0.1] epoch 13/20  eps_so_far=0.08
+  [cifar10 eps~0.1] epoch 14/20  eps_so_far=0.08
+  [cifar10 eps~0.1] epoch 15/20  eps_so_far=0.08
+  [cifar10 eps~0.1] epoch 16/20  eps_so_far=0.09
+  [cifar10 eps~0.1] epoch 17/20  eps_so_far=0.09
+  [cifar10 eps~0.1] epoch 18/20  eps_so_far=0.09
+  [cifar10 eps~0.1] epoch 19/20  eps_so_far=0.09
+  [cifar10 eps~0.1] epoch 20/20  eps_so_far=0.10
+[cifar10] target_eps=0.1  realized_eps=0.096  test_acc=0.3526
+[cifar10 eps~0.25] device=cuda, loading data...
+  [cifar10 eps~0.25] epoch 1/20  eps_so_far=0.06
+  [cifar10 eps~0.25] epoch 2/20  eps_so_far=0.08
+  [cifar10 eps~0.25] epoch 3/20  eps_so_far=0.09
+  [cifar10 eps~0.25] epoch 4/20  eps_so_far=0.11
+  [cifar10 eps~0.25] epoch 5/20  eps_so_far=0.12
+  [cifar10 eps~0.25] epoch 6/20  eps_so_far=0.13
+  [cifar10 eps~0.25] epoch 7/20  eps_so_far=0.14
+  [cifar10 eps~0.25] epoch 8/20  eps_so_far=0.15
+  [cifar10 eps~0.25] epoch 9/20  eps_so_far=0.16
+  [cifar10 eps~0.25] epoch 10/20  eps_so_far=0.17
+  [cifar10 eps~0.25] epoch 11/20  eps_so_far=0.18
+  [cifar10 eps~0.25] epoch 12/20  eps_so_far=0.19
+  [cifar10 eps~0.25] epoch 13/20  eps_so_far=0.20
+  [cifar10 eps~0.25] epoch 14/20  eps_so_far=0.20
+  [cifar10 eps~0.25] epoch 15/20  eps_so_far=0.21
+  [cifar10 eps~0.25] epoch 16/20  eps_so_far=0.22
+  [cifar10 eps~0.25] epoch 17/20  eps_so_far=0.23
+  [cifar10 eps~0.25] epoch 18/20  eps_so_far=0.23
+  [cifar10 eps~0.25] epoch 19/20  eps_so_far=0.24
+  [cifar10 eps~0.25] epoch 20/20  eps_so_far=0.25
+[cifar10] target_eps=0.25  realized_eps=0.245  test_acc=0.3909
+[cifar10 eps~0.5] device=cuda, loading data...
+  [cifar10 eps~0.5] epoch 1/20  eps_so_far=0.11
+  [cifar10 eps~0.5] epoch 2/20  eps_so_far=0.15
+  [cifar10 eps~0.5] epoch 3/20  eps_so_far=0.19
+  [cifar10 eps~0.5] epoch 4/20  eps_so_far=0.22
+  [cifar10 eps~0.5] epoch 5/20  eps_so_far=0.24
+  [cifar10 eps~0.5] epoch 6/20  eps_so_far=0.27
+  [cifar10 eps~0.5] epoch 7/20  eps_so_far=0.29
+  [cifar10 eps~0.5] epoch 8/20  eps_so_far=0.31
+  [cifar10 eps~0.5] epoch 9/20  eps_so_far=0.33
+  [cifar10 eps~0.5] epoch 10/20  eps_so_far=0.35
+  [cifar10 eps~0.5] epoch 11/20  eps_so_far=0.36
+  [cifar10 eps~0.5] epoch 12/20  eps_so_far=0.38
+  [cifar10 eps~0.5] epoch 13/20  eps_so_far=0.40
+  [cifar10 eps~0.5] epoch 14/20  eps_so_far=0.41
+  [cifar10 eps~0.5] epoch 15/20  eps_so_far=0.43
+  [cifar10 eps~0.5] epoch 16/20  eps_so_far=0.44
+  [cifar10 eps~0.5] epoch 17/20  eps_so_far=0.46
+  [cifar10 eps~0.5] epoch 18/20  eps_so_far=0.47
+  [cifar10 eps~0.5] epoch 19/20  eps_so_far=0.49
+  [cifar10 eps~0.5] epoch 20/20  eps_so_far=0.50
+[cifar10] target_eps=0.5  realized_eps=0.499  test_acc=0.4032
+[cifar10 eps~1.0] device=cuda, loading data...
+  [cifar10 eps~1.0] epoch 1/20  eps_so_far=0.22
+  [cifar10 eps~1.0] epoch 2/20  eps_so_far=0.30
+  [cifar10 eps~1.0] epoch 3/20  eps_so_far=0.37
+  [cifar10 eps~1.0] epoch 4/20  eps_so_far=0.43
+  [cifar10 eps~1.0] epoch 5/20  eps_so_far=0.48
+  [cifar10 eps~1.0] epoch 6/20  eps_so_far=0.53
+  [cifar10 eps~1.0] epoch 7/20  eps_so_far=0.57
+  [cifar10 eps~1.0] epoch 8/20  eps_so_far=0.61
+  [cifar10 eps~1.0] epoch 9/20  eps_so_far=0.65
+  [cifar10 eps~1.0] epoch 10/20  eps_so_far=0.69
+  [cifar10 eps~1.0] epoch 11/20  eps_so_far=0.72
+  [cifar10 eps~1.0] epoch 12/20  eps_so_far=0.76
+  [cifar10 eps~1.0] epoch 13/20  eps_so_far=0.79
+  [cifar10 eps~1.0] epoch 14/20  eps_so_far=0.82
+  [cifar10 eps~1.0] epoch 15/20  eps_so_far=0.85
+  [cifar10 eps~1.0] epoch 16/20  eps_so_far=0.88
+  [cifar10 eps~1.0] epoch 17/20  eps_so_far=0.91
+  [cifar10 eps~1.0] epoch 18/20  eps_so_far=0.94
+  [cifar10 eps~1.0] epoch 19/20  eps_so_far=0.96
+  [cifar10 eps~1.0] epoch 20/20  eps_so_far=0.99
+[cifar10] target_eps=1.0  realized_eps=0.990  test_acc=0.3913
+[cifar10 eps~2.0] device=cuda, loading data...
+  [cifar10 eps~2.0] epoch 1/20  eps_so_far=0.47
+  [cifar10 eps~2.0] epoch 2/20  eps_so_far=0.64
+  [cifar10 eps~2.0] epoch 3/20  eps_so_far=0.77
+  [cifar10 eps~2.0] epoch 4/20  eps_so_far=0.88
+  [cifar10 eps~2.0] epoch 5/20  eps_so_far=0.98
+  [cifar10 eps~2.0] epoch 6/20  eps_so_far=1.08
+  [cifar10 eps~2.0] epoch 7/20  eps_so_far=1.16
+  [cifar10 eps~2.0] epoch 8/20  eps_so_far=1.24
+  [cifar10 eps~2.0] epoch 9/20  eps_so_far=1.32
+  [cifar10 eps~2.0] epoch 10/20  eps_so_far=1.39
+  [cifar10 eps~2.0] epoch 11/20  eps_so_far=1.46
+  [cifar10 eps~2.0] epoch 12/20  eps_so_far=1.53
+  [cifar10 eps~2.0] epoch 13/20  eps_so_far=1.59
+  [cifar10 eps~2.0] epoch 14/20  eps_so_far=1.65
+  [cifar10 eps~2.0] epoch 15/20  eps_so_far=1.71
+  [cifar10 eps~2.0] epoch 16/20  eps_so_far=1.77
+  [cifar10 eps~2.0] epoch 17/20  eps_so_far=1.83
+  [cifar10 eps~2.0] epoch 18/20  eps_so_far=1.89
+  [cifar10 eps~2.0] epoch 19/20  eps_so_far=1.94
+  [cifar10 eps~2.0] epoch 20/20  eps_so_far=1.99
+[cifar10] target_eps=2.0  realized_eps=1.994  test_acc=0.4008
+[cifar10 eps~4.0] device=cuda, loading data...
+  [cifar10 eps~4.0] epoch 1/20  eps_so_far=1.19
+  [cifar10 eps~4.0] epoch 2/20  eps_so_far=1.47
+  [cifar10 eps~4.0] epoch 3/20  eps_so_far=1.71
+  [cifar10 eps~4.0] epoch 4/20  eps_so_far=1.91
+  [cifar10 eps~4.0] epoch 5/20  eps_so_far=2.09
+  [cifar10 eps~4.0] epoch 6/20  eps_so_far=2.26
+  [cifar10 eps~4.0] epoch 7/20  eps_so_far=2.42
+  [cifar10 eps~4.0] epoch 8/20  eps_so_far=2.57
+  [cifar10 eps~4.0] epoch 9/20  eps_so_far=2.71
+  [cifar10 eps~4.0] epoch 10/20  eps_so_far=2.85
+  [cifar10 eps~4.0] epoch 11/20  eps_so_far=2.98
+  [cifar10 eps~4.0] epoch 12/20  eps_so_far=3.11
+  [cifar10 eps~4.0] epoch 13/20  eps_so_far=3.23
+  [cifar10 eps~4.0] epoch 14/20  eps_so_far=3.35
+  [cifar10 eps~4.0] epoch 15/20  eps_so_far=3.46
+  [cifar10 eps~4.0] epoch 16/20  eps_so_far=3.57
+  [cifar10 eps~4.0] epoch 17/20  eps_so_far=3.68
+  [cifar10 eps~4.0] epoch 18/20  eps_so_far=3.79
+  [cifar10 eps~4.0] epoch 19/20  eps_so_far=3.89
+  [cifar10 eps~4.0] epoch 20/20  eps_so_far=4.00
+[cifar10] target_eps=4.0  realized_eps=3.997  test_acc=0.4135
+[cifar10 eps~8.0] device=cuda, loading data...
+  [cifar10 eps~8.0] epoch 1/20  eps_so_far=2.80
+  [cifar10 eps~8.0] epoch 2/20  eps_so_far=3.33
+  [cifar10 eps~8.0] epoch 3/20  eps_so_far=3.75
+  [cifar10 eps~8.0] epoch 4/20  eps_so_far=4.12
+  [cifar10 eps~8.0] epoch 5/20  eps_so_far=4.46
+  [cifar10 eps~8.0] epoch 6/20  eps_so_far=4.77
+  [cifar10 eps~8.0] epoch 7/20  eps_so_far=5.06
+  [cifar10 eps~8.0] epoch 8/20  eps_so_far=5.33
+  [cifar10 eps~8.0] epoch 9/20  eps_so_far=5.60
+  [cifar10 eps~8.0] epoch 10/20  eps_so_far=5.85
+  [cifar10 eps~8.0] epoch 11/20  eps_so_far=6.09
+  [cifar10 eps~8.0] epoch 12/20  eps_so_far=6.32
+  [cifar10 eps~8.0] epoch 13/20  eps_so_far=6.55
+  [cifar10 eps~8.0] epoch 14/20  eps_so_far=6.77
+  [cifar10 eps~8.0] epoch 15/20  eps_so_far=6.99
+  [cifar10 eps~8.0] epoch 16/20  eps_so_far=7.20
+  [cifar10 eps~8.0] epoch 17/20  eps_so_far=7.40
+  [cifar10 eps~8.0] epoch 18/20  eps_so_far=7.60
+  [cifar10 eps~8.0] epoch 19/20  eps_so_far=7.80
+  [cifar10 eps~8.0] epoch 20/20  eps_so_far=7.99
+[cifar10] target_eps=8.0  realized_eps=7.994  test_acc=0.3932
+[cifar10 eps~16.0] device=cuda, loading data...
+  [cifar10 eps~16.0] epoch 1/20  eps_so_far=5.50
+  [cifar10 eps~16.0] epoch 2/20  eps_so_far=6.61
+  [cifar10 eps~16.0] epoch 3/20  eps_so_far=7.48
+  [cifar10 eps~16.0] epoch 4/20  eps_so_far=8.23
+  [cifar10 eps~16.0] epoch 5/20  eps_so_far=8.90
+  [cifar10 eps~16.0] epoch 6/20  eps_so_far=9.53
+  [cifar10 eps~16.0] epoch 7/20  eps_so_far=10.11
+  [cifar10 eps~16.0] epoch 8/20  eps_so_far=10.66
+  [cifar10 eps~16.0] epoch 9/20  eps_so_far=11.18
+  [cifar10 eps~16.0] epoch 10/20  eps_so_far=11.69
+  [cifar10 eps~16.0] epoch 11/20  eps_so_far=12.17
+  [cifar10 eps~16.0] epoch 12/20  eps_so_far=12.64
+  [cifar10 eps~16.0] epoch 13/20  eps_so_far=13.10
+  [cifar10 eps~16.0] epoch 14/20  eps_so_far=13.54
+  [cifar10 eps~16.0] epoch 15/20  eps_so_far=13.97
+  [cifar10 eps~16.0] epoch 16/20  eps_so_far=14.39
+  [cifar10 eps~16.0] epoch 17/20  eps_so_far=14.80
+  [cifar10 eps~16.0] epoch 18/20  eps_so_far=15.21
+  [cifar10 eps~16.0] epoch 19/20  eps_so_far=15.61
+  [cifar10 eps~16.0] epoch 20/20  eps_so_far=15.99
+[cifar10] target_eps=16.0  realized_eps=15.995  test_acc=0.4067
+wrote results/dp_cifar10.csv

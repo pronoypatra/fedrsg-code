@@ -1,0 +1,10 @@
+=== run_all.sh MODE=full-dp  start Mon Jul 27 01:12:47 AM IST 2026 ===
+>>> [dp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset mnist --epsilons 0.1 0.25 0.5 1 2 4 8 16 --epochs 20 --out results/dp_mnist.csv
+    OK  dp_mnist
+>>> [dp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset cifar10 --epsilons 0.1 0.25 0.5 1 2 4 8 16 --epochs 20 --out results/dp_cifar10.csv
+    OK  dp_cifar10
+>>> [dp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset femnist --epsilons 0.1 0.25 0.5 1 2 4 8 16 --epochs 20 --out results/dp_femnist.csv
+    OK  dp_femnist
+>>> [dp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset adult --epsilons 0.1 0.25 0.5 1 2 4 8 16 --epochs 20 --out results/dp_adult.csv
+    OK  dp_adult
+=== done Mon Jul 27 02:14:21 AM IST 2026.  CSVs in results/  ===
