@@ -1,0 +1,119 @@
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py:109: UserWarning: A network error occurred while downloading https://www.openml.org/api/v1/json/data/list/data_name/adult/limit/2/data_version/2. Retrying...
+  warn(
+Traceback (most recent call last):
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 88, in <module>
+    main()
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 79, in main
+    realized, acc = train_dp(args.dataset, te, args.epochs, args.batch,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 38, in train_dp
+    tr, te, meta = get_dataset(dataset, root)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/common.py", line 61, in get_dataset
+    return _get_adult(root)
+           ^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/common.py", line 72, in _get_adult
+    ds = fetch_openml("adult", version=2, as_frame=True, data_home=root)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 1016, in fetch_openml
+    data_info = _get_data_info_by_name(
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 334, in _get_data_info_by_name
+    json_data = _get_json_content_from_openml_api(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 256, in _get_json_content_from_openml_api
+    raise error
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 251, in _get_json_content_from_openml_api
+    return _load_json()
+           ^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 66, in wrapper
+    return f(*args, **kw)
+           ^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 246, in _load_json
+    _open_openml_url(url, data_home, n_retries=n_retries, delay=delay)
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 178, in _open_openml_url
+    _retry_on_network_error(n_retries, delay, req.full_url)(urlopen)(
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 102, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 521, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 630, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 559, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 639, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 504: Gateway Time-out
+[adult eps~0.5] device=cuda, loading data...
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py:109: UserWarning: A network error occurred while downloading https://www.openml.org/api/v1/json/data/list/data_name/adult/limit/2/data_version/2. Retrying...
+  warn(
+Traceback (most recent call last):
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 92, in <module>
+    main()
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 82, in main
+    realized, acc = train_dp(args.dataset, te, args.epochs, args.batch,
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/dp_accuracy.py", line 39, in train_dp
+    tr, te, meta = get_dataset(dataset, root)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/common.py", line 61, in get_dataset
+    return _get_adult(root)
+           ^^^^^^^^^^^^^^^^
+  File "/home/pronoy/fedrsg-code/grounding/common.py", line 72, in _get_adult
+    ds = fetch_openml("adult", version=2, as_frame=True, data_home=root)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/utils/_param_validation.py", line 218, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 1016, in fetch_openml
+    data_info = _get_data_info_by_name(
+                ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 334, in _get_data_info_by_name
+    json_data = _get_json_content_from_openml_api(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 256, in _get_json_content_from_openml_api
+    raise error
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 251, in _get_json_content_from_openml_api
+    return _load_json()
+           ^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 66, in wrapper
+    return f(*args, **kw)
+           ^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 246, in _load_json
+    _open_openml_url(url, data_home, n_retries=n_retries, delay=delay)
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 178, in _open_openml_url
+    _retry_on_network_error(n_retries, delay, req.full_url)(urlopen)(
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py", line 102, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 215, in urlopen
+    return opener.open(url, data, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 521, in open
+    response = meth(req, response)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 630, in http_response
+    response = self.parent.error(
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 559, in error
+    return self._call_chain(*args)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 492, in _call_chain
+    result = func(*args)
+             ^^^^^^^^^^^
+  File "/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/urllib/request.py", line 639, in http_error_default
+    raise HTTPError(req.full_url, code, msg, hdrs, fp)
+urllib.error.HTTPError: HTTP Error 504: Gateway Time-out

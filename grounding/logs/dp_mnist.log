@@ -1,0 +1,102 @@
+opacus required: pip install -r requirements-gpu.txt
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/privacy_engine.py:98: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the largest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  [mnist eps~1.0] epoch 1/1
+[mnist] target_eps=1.0  realized_eps=0.990  test_acc=0.8593
+  [mnist eps~4.0] epoch 1/1
+[mnist] target_eps=4.0  realized_eps=3.997  test_acc=0.9060
+wrote results/dp_mnist.csv
+[mnist eps~0.5] device=cuda, loading data...
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/privacy_engine.py:98: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the largest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  [mnist eps~0.5] epoch 1/15
+  [mnist eps~0.5] epoch 2/15
+  [mnist eps~0.5] epoch 3/15
+  [mnist eps~0.5] epoch 4/15
+  [mnist eps~0.5] epoch 5/15
+  [mnist eps~0.5] epoch 6/15
+  [mnist eps~0.5] epoch 7/15
+  [mnist eps~0.5] epoch 8/15
+  [mnist eps~0.5] epoch 9/15
+  [mnist eps~0.5] epoch 10/15
+  [mnist eps~0.5] epoch 11/15
+  [mnist eps~0.5] epoch 12/15
+  [mnist eps~0.5] epoch 13/15
+  [mnist eps~0.5] epoch 14/15
+  [mnist eps~0.5] epoch 15/15
+[mnist] target_eps=0.5  realized_eps=0.492  test_acc=0.6461
+[mnist eps~1.0] device=cuda, loading data...
+  [mnist eps~1.0] epoch 1/15
+  [mnist eps~1.0] epoch 2/15
+  [mnist eps~1.0] epoch 3/15
+  [mnist eps~1.0] epoch 4/15
+  [mnist eps~1.0] epoch 5/15
+  [mnist eps~1.0] epoch 6/15
+  [mnist eps~1.0] epoch 7/15
+  [mnist eps~1.0] epoch 8/15
+  [mnist eps~1.0] epoch 9/15
+  [mnist eps~1.0] epoch 10/15
+  [mnist eps~1.0] epoch 11/15
+  [mnist eps~1.0] epoch 12/15
+  [mnist eps~1.0] epoch 13/15
+  [mnist eps~1.0] epoch 14/15
+  [mnist eps~1.0] epoch 15/15
+[mnist] target_eps=1.0  realized_eps=1.000  test_acc=0.1304
+[mnist eps~2.0] device=cuda, loading data...
+  [mnist eps~2.0] epoch 1/15
+  [mnist eps~2.0] epoch 2/15
+  [mnist eps~2.0] epoch 3/15
+  [mnist eps~2.0] epoch 4/15
+  [mnist eps~2.0] epoch 5/15
+  [mnist eps~2.0] epoch 6/15
+  [mnist eps~2.0] epoch 7/15
+  [mnist eps~2.0] epoch 8/15
+  [mnist eps~2.0] epoch 9/15
+  [mnist eps~2.0] epoch 10/15
+  [mnist eps~2.0] epoch 11/15
+  [mnist eps~2.0] epoch 12/15
+  [mnist eps~2.0] epoch 13/15
+  [mnist eps~2.0] epoch 14/15
+  [mnist eps~2.0] epoch 15/15
+[mnist] target_eps=2.0  realized_eps=1.993  test_acc=0.8282
+[mnist eps~4.0] device=cuda, loading data...
+  [mnist eps~4.0] epoch 1/15
+  [mnist eps~4.0] epoch 2/15
+  [mnist eps~4.0] epoch 3/15
+  [mnist eps~4.0] epoch 4/15
+  [mnist eps~4.0] epoch 5/15
+  [mnist eps~4.0] epoch 6/15
+  [mnist eps~4.0] epoch 7/15
+  [mnist eps~4.0] epoch 8/15
+  [mnist eps~4.0] epoch 9/15
+  [mnist eps~4.0] epoch 10/15
+  [mnist eps~4.0] epoch 11/15
+  [mnist eps~4.0] epoch 12/15
+  [mnist eps~4.0] epoch 13/15
+  [mnist eps~4.0] epoch 14/15
+  [mnist eps~4.0] epoch 15/15
+[mnist] target_eps=4.0  realized_eps=3.996  test_acc=0.8752
+[mnist eps~8.0] device=cuda, loading data...
+  [mnist eps~8.0] epoch 1/15
+  [mnist eps~8.0] epoch 2/15
+  [mnist eps~8.0] epoch 3/15
+  [mnist eps~8.0] epoch 4/15
+  [mnist eps~8.0] epoch 5/15
+  [mnist eps~8.0] epoch 6/15
+  [mnist eps~8.0] epoch 7/15
+  [mnist eps~8.0] epoch 8/15
+  [mnist eps~8.0] epoch 9/15
+  [mnist eps~8.0] epoch 10/15
+  [mnist eps~8.0] epoch 11/15
+  [mnist eps~8.0] epoch 12/15
+  [mnist eps~8.0] epoch 13/15
+  [mnist eps~8.0] epoch 14/15
+  [mnist eps~8.0] epoch 15/15
+[mnist] target_eps=8.0  realized_eps=7.995  test_acc=0.8851
+wrote results/dp_mnist.csv

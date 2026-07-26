@@ -1,0 +1,24 @@
+=== run_all.sh MODE=smoke  start Sun Jul 26 08:53:53 PM IST 2026 ===
+>>> [comp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset mnist --epochs 2 --out results/comp_mnist.csv
+    OK  comp_mnist
+>>> [dp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset mnist --epsilons 1 4 --epochs 1 --out results/dp_mnist.csv
+    FAIL dp_mnist (see logs/dp_mnist.log)
+>>> [comp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset cifar10 --epochs 2 --out results/comp_cifar10.csv
+=== run_all.sh MODE=smoke  start Sun Jul 26 08:57:54 PM IST 2026 ===
+>>> [comp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset mnist --epochs 2 --out results/comp_mnist.csv
+    OK  comp_mnist
+>>> [dp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset mnist --epsilons 1 4 --epochs 1 --out results/dp_mnist.csv
+    OK  dp_mnist
+>>> [comp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset cifar10 --epochs 2 --out results/comp_cifar10.csv
+    OK  comp_cifar10
+>>> [dp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset cifar10 --epsilons 1 4 --epochs 1 --out results/dp_cifar10.csv
+    OK  dp_cifar10
+>>> [comp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset femnist --epochs 2 --out results/comp_femnist.csv
+    OK  comp_femnist
+>>> [dp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset femnist --epsilons 1 4 --epochs 1 --out results/dp_femnist.csv
+    OK  dp_femnist
+>>> [comp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset adult --epochs 2 --out results/comp_adult.csv
+    FAIL comp_adult (see logs/comp_adult.log)
+>>> [dp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset adult --epsilons 1 4 --epochs 1 --out results/dp_adult.csv
+    FAIL dp_adult (see logs/dp_adult.log)
+=== done Sun Jul 26 10:04:05 PM IST 2026.  CSVs in results/  ===

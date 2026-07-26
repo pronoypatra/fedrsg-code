@@ -1,0 +1,18 @@
+=== run_all.sh MODE=full  start Sun Jul 26 10:13:13 PM IST 2026 ===
+>>> [comp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset mnist --epochs 30 --out results/comp_mnist.csv
+    OK  comp_mnist
+>>> [dp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset mnist --epsilons 0.5 1 2 4 8 --epochs 15 --out results/dp_mnist.csv
+    OK  dp_mnist
+>>> [comp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset cifar10 --epochs 60 --out results/comp_cifar10.csv
+    OK  comp_cifar10
+>>> [dp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset cifar10 --epsilons 0.5 1 2 4 8 --epochs 15 --out results/dp_cifar10.csv
+    OK  dp_cifar10
+>>> [comp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset femnist --epochs 40 --out results/comp_femnist.csv
+    OK  comp_femnist
+>>> [dp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset femnist --epsilons 0.5 1 2 4 8 --epochs 15 --out results/dp_femnist.csv
+    OK  dp_femnist
+>>> [comp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset adult --epochs 40 --out results/comp_adult.csv
+    FAIL comp_adult (see logs/comp_adult.log)
+>>> [dp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset adult --epsilons 0.5 1 2 4 8 --epochs 15 --out results/dp_adult.csv
+    FAIL dp_adult (see logs/dp_adult.log)
+=== done Sun Jul 26 10:44:40 PM IST 2026.  CSVs in results/  ===
