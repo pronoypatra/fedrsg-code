@@ -40,3 +40,21 @@
 >>> [dp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset adult --epsilons 1 8 --epochs 4 --out results/dp_adult.csv
     OK  dp_adult
 === done Sun Jul 26 11:43:39 PM IST 2026.  CSVs in results/  ===
+=== run_all.sh MODE=smoke  start Mon Jul 27 12:30:17 AM IST 2026 ===
+>>> [comp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset mnist --epochs 3 --eval-every 20 --out results/comp_mnist.csv
+    OK  comp_mnist
+>>> [dp_mnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset mnist --epsilons 1 8 --epochs 4 --out results/dp_mnist.csv
+    OK  dp_mnist
+>>> [comp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset cifar10 --epochs 3 --eval-every 100 --out results/comp_cifar10.csv
+    OK  comp_cifar10
+>>> [dp_cifar10] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset cifar10 --epsilons 1 8 --epochs 4 --out results/dp_cifar10.csv
+    OK  dp_cifar10
+>>> [comp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset femnist --epochs 3 --eval-every 30 --out results/comp_femnist.csv
+    OK  comp_femnist
+>>> [dp_femnist] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset femnist --epsilons 1 8 --epochs 4 --out results/dp_femnist.csv
+    OK  dp_femnist
+>>> [comp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python comp_cost.py --dataset adult --epochs 3 --eval-every 10 --out results/comp_adult.csv
+    OK  comp_adult
+>>> [dp_adult] /home/pronoy/miniconda3/envs/fedenv/bin/python dp_accuracy.py --dataset adult --epsilons 1 8 --epochs 4 --out results/dp_adult.csv
+    OK  dp_adult
+=== done Mon Jul 27 12:49:29 AM IST 2026.  CSVs in results/  ===

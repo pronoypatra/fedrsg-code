@@ -118,3 +118,21 @@ sys:1: UserWarning: Full backward hook is firing when gradients are computed wit
   [mnist eps~8.0] epoch 4/4  eps_so_far=8.00
 [mnist] target_eps=8.0  realized_eps=7.996  test_acc=0.7986
 wrote results/dp_mnist.csv
+[mnist eps~1.0] device=cuda, loading data...
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/privacy_engine.py:98: UserWarning: Secure RNG turned off. This is perfectly fine for experimentation as it allows for much faster training performance, but remember to turn it on and retrain one last time before production with ``secure_mode`` turned on.
+  warnings.warn(
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/opacus/accountants/analysis/rdp.py:332: UserWarning: Optimal order is the largest alpha. Please consider expanding the range of alphas to get a tighter privacy bound.
+  warnings.warn(
+sys:1: UserWarning: Full backward hook is firing when gradients are computed with respect to module outputs since no inputs require gradients. See https://docs.pytorch.org/docs/main/generated/torch.nn.Module.html#torch.nn.Module.register_full_backward_hook for more details.
+  [mnist eps~1.0] epoch 1/4  eps_so_far=0.55
+  [mnist eps~1.0] epoch 2/4  eps_so_far=0.73
+  [mnist eps~1.0] epoch 3/4  eps_so_far=0.87
+  [mnist eps~1.0] epoch 4/4  eps_so_far=1.00
+[mnist] target_eps=1.0  realized_eps=0.999  test_acc=0.7810
+[mnist eps~8.0] device=cuda, loading data...
+  [mnist eps~8.0] epoch 1/4  eps_so_far=5.39
+  [mnist eps~8.0] epoch 2/4  eps_so_far=6.45
+  [mnist eps~8.0] epoch 3/4  eps_so_far=7.28
+  [mnist eps~8.0] epoch 4/4  eps_so_far=8.00
+[mnist] target_eps=8.0  realized_eps=7.996  test_acc=0.7873
+wrote results/dp_mnist.csv

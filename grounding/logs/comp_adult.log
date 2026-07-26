@@ -123,3 +123,15 @@ urllib.error.HTTPError: HTTP Error 504: Gateway Time-out
 [adult] epoch   2  test_acc 0.7667  lr 0.0125
 [adult] epoch   3  test_acc 0.8278  lr 0.0000
 wrote results/comp_adult.csv
+[adult] device=cuda, loading data...
+/home/pronoy/miniconda3/envs/fedenv/lib/python3.12/site-packages/sklearn/datasets/_openml.py:109: UserWarning: A network error occurred while downloading https://www.openml.org/api/v1/json/data/list/data_name/adult/limit/2/data_version/2. Retrying...
+  warn(
+[adult] OpenML fetch failed (attempt 1/3): HTTP Error 504: Gateway Time-out
+[adult] OpenML fetch failed (attempt 2/3): HTTP Error 504: Gateway Time-out
+[adult] OpenML fetch failed (attempt 3/3): HTTP Error 504: Gateway Time-out
+[adult] OpenML unreachable -> falling back to offline sklearn digits (tabular 64-d, 10 cls). Report as 'Digits' if used.
+[adult] data ready (1437 train), building model...
+[adult] epoch   1  step 12  test_acc 0.5917  lr 0.0375
+[adult] epoch   2  step 24  test_acc 0.7500  lr 0.0125
+[adult] epoch   3  step 36  test_acc 0.7889  lr 0.0000
+wrote results/comp_adult.csv
