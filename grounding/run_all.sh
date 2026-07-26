@@ -19,12 +19,15 @@ mkdir -p results logs
 
 DATASETS=(mnist cifar10 femnist adult)
 
+# sub-epoch eval frequency (steps) per dataset -- easy/fast-rising sets need finer
+# sampling to resolve the 0.3-0.9 accuracy range before it saturates.
+declare -A EV=( [mnist]=20 [cifar10]=100 [femnist]=30 [adult]=10 )
+
 if [ "$MODE" = "smoke" ]; then
-  # DP needs a few epochs to show it TRAINS (1 epoch can't distinguish fix from
-  # the earlier collapse); comp stays short.
+  # DP needs a few epochs to show it TRAINS; comp stays short but sub-epoch eval
+  # already resolves the curve within those epochs.
   CEPOCHS=3; DPEPOCHS=4; EPS="1 8"; TAG="smoke"
 else
-  # per-dataset comp epochs; DP epochs shared
   declare -A CE=( [mnist]=30 [cifar10]=80 [femnist]=40 [adult]=40 )
   DPEPOCHS=20; EPS="0.5 1 2 4 8"; TAG="full"
 fi
@@ -44,7 +47,7 @@ echo "=== run_all.sh MODE=$MODE  start $(date) ===" | tee -a "logs/${TAG}.log"
 for ds in "${DATASETS[@]}"; do
   if [ "$MODE" = "smoke" ]; then ce=$CEPOCHS; else ce=${CE[$ds]}; fi
   run "comp_${ds}" $PY comp_cost.py --dataset "$ds" --epochs "$ce" \
-      --out "results/comp_${ds}.csv"
+      --eval-every "${EV[$ds]}" --out "results/comp_${ds}.csv"
   run "dp_${ds}"   $PY dp_accuracy.py --dataset "$ds" --epsilons $EPS \
       --epochs "$DPEPOCHS" --out "results/dp_${ds}.csv"
 done
