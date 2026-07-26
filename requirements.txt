@@ -1,0 +1,6 @@
+# Local mechanism-layer experiments (no GPU / no ML training here).
+# Generic scientific-Python stack, reusable for other local tasks.
+numpy
+scipy
+matplotlib
+pandas

@@ -1,0 +1,15 @@
+.venv/
+.venv-gpu/
+__pycache__/
+*.pyc
+.DS_Store
+results/
+# GPU grounding CSVs ARE data we want in git (tiny) so they travel laptop<->server.
+!grounding/results/
+!grounding/results/*.csv
+# GPU run logs travel back too, so a failure can be diagnosed without re-running.
+!grounding/logs/
+!grounding/logs/*.log
+# Raster previews are regenerable; keep only the vector PDFs (used in the paper).
+*.png
+# figures/*.pdf are tracked (default) — they go into the paper.

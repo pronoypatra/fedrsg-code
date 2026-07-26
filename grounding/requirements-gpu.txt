@@ -1,0 +1,7 @@
+# GPU grounding + practice runs ONLY (run on the server, not in the local .venv).
+torch
+torchvision
+opacus            # real DP-SGD with a privacy accountant
+scikit-learn      # UCI Adult (non-vision tabular task) via fetch_openml
+numpy
+pandas
