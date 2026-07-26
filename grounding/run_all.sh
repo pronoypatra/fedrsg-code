@@ -27,10 +27,14 @@ declare -A EV=( [mnist]=20 [cifar10]=100 [femnist]=30 [adult]=10 )
 # which stages to run for this mode
 DO_COMP=1; DO_DP=1
 if [ "$MODE" = "smoke" ]; then
-  CEPOCHS=3; DPEPOCHS=4; EPS="1 8"; TAG="smoke"
+  CEPOCHS=3; DPEPOCHS=4; EPS="0.5 8"; TAG="smoke"
 else
   declare -A CE=( [mnist]=30 [cifar10]=80 [femnist]=40 [adult]=40 )
-  DPEPOCHS=20; EPS="0.5 1 2 4 8"; TAG="$MODE"
+  # eps is spaced GEOMETRICALLY and anchored LOW: in DP-SGD the noise multiplier
+  # ~ 1/eps, so accuracy rises steeply at low eps then flattens (concave in eps,
+  # matching the A(a,eps) assumption). Linear 1..8 sits on the plateau and looks
+  # flat; log-spaced 0.1..16 captures the knee where the variation actually is.
+  DPEPOCHS=20; EPS="0.1 0.25 0.5 1 2 4 8 16"; TAG="$MODE"
   case "$MODE" in
     full)      : ;;                         # comp + dp
     full-comp) DO_DP=0 ;;                   # comp only (ready now)
