@@ -73,8 +73,20 @@ def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
 
     # track the checkpoint whose HELD-OUT accuracy is closest to target
     best = {"err": float("inf"), "state": None, "acc": 0.0}
+    def _eval_acc():
+        # Under DP, the Opacus GradSampleModule records activations on every
+        # forward; evaluation forwards (no matching backward) would leave stale
+        # activations and crash the next training backward ("pop from empty list").
+        # Disable the grad-sample hooks around evaluation, then re-enable.
+        if engine is not None and hasattr(model, "disable_hooks"):
+            model.disable_hooks()
+            try:
+                return test_acc(model, tel, device)
+            finally:
+                model.enable_hooks()
+        return test_acc(model, tel, device)
     def _consider():
-        acc = test_acc(model, tel, device)
+        acc = _eval_acc()
         if abs(acc - target) < best["err"]:
             best.update(err=abs(acc - target), acc=acc,
                         state=copy.deepcopy(model.state_dict()))
@@ -106,7 +118,7 @@ def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
 
     if best["state"] is not None:                 # restore closest-to-target model
         model.load_state_dict(best["state"])
-    achieved = best["acc"] if best["state"] is not None else test_acc(model, tel, device)
+    achieved = best["acc"] if best["state"] is not None else _eval_acc()
     realized = engine.get_epsilon(delta) if engine is not None else float("inf")
     return achieved, p1, p2, realized
 
