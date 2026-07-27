@@ -71,6 +71,9 @@ def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
     else:
         opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
 
+    # track the checkpoint whose HELD-OUT accuracy is closest to target
+    best = {"err": float("inf"), "state": None, "acc": 0.0}
+
     # A SEPARATE plain model for evaluation. Under DP the training model is an
     # Opacus GradSampleModule that records activations on every forward; evaluating
     # it directly (forward with no matching backward) corrupts the hook state and
