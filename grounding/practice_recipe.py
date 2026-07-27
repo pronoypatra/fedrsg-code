@@ -71,19 +71,22 @@ def train_to_target(dataset, target, root, max_epochs, batch, lr1, lr2,
     else:
         opt = torch.optim.SGD(model.parameters(), lr=lr1, momentum=0.9)
 
-    # track the checkpoint whose HELD-OUT accuracy is closest to target
-    best = {"err": float("inf"), "state": None, "acc": 0.0}
+    # A SEPARATE plain model for evaluation. Under DP the training model is an
+    # Opacus GradSampleModule that records activations on every forward; evaluating
+    # it directly (forward with no matching backward) corrupts the hook state and
+    # crashes the next training backward ("pop from empty list"). We instead copy
+    # the current weights into this untouched plain model and evaluate THAT, so the
+    # training model is never forward-passed outside its train/backward loop.
+    eval_model = build_model(meta).to(device)
+    def _current_weights():
+        sd = model.state_dict()
+        # strip Opacus's "_module." prefix so keys match the plain model
+        return {k[len("_module."):] if k.startswith("_module.") else k: v
+                for k, v in sd.items()}
     def _eval_acc():
-        # Under DP, the Opacus GradSampleModule records activations on every
-        # forward; evaluation forwards (no matching backward) would leave stale
-        # activations and crash the next training backward ("pop from empty list").
-        # Disable the grad-sample hooks around evaluation, then re-enable.
-        if engine is not None and hasattr(model, "disable_hooks"):
-            model.disable_hooks()
-            try:
-                return test_acc(model, tel, device)
-            finally:
-                model.enable_hooks()
+        if engine is not None:
+            eval_model.load_state_dict(_current_weights(), strict=False)
+            return test_acc(eval_model, tel, device)
         return test_acc(model, tel, device)
     def _consider():
         acc = _eval_acc()
