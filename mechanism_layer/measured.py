@@ -35,63 +35,31 @@ def _load(ds: str) -> dict:
 
 
 class MeasuredComp:
-    """C^comp(a): a SMOOTH, monotone, convex cost fitted to the measured
-    compute-to-reach-a points, centered so cost(a_curr)=0.
-
-    The raw measurement is a staircase (accuracy was checked every N optimizer
-    steps), but the underlying cost of accuracy is smooth; a staircase also breaks
-    the unimodality the client solver exploits.  We therefore fit the paper's
-    closed convex form
-        C(a) = k * log( a_curr(1-a_curr) / (a(1-a)) ) + b*(a - a_curr)
-    (smooth, increasing, convex on [a_curr,1), zero at a_curr for b chosen so) by
-    non-negative least squares to the measured points.  This both removes the
-    staircase and directly checks the assumed functional shape (we expose r2_fit).
-    Set smooth=False to fall back to the raw monotone PCHIP interpolant.
-    """
-    def __init__(self, ds: str, a_curr: float = 0.5, normalize: bool = True,
-                 smooth: bool = True):
+    """C^comp(a): monotone, shape-preserving interpolation of the measured
+    compute-to-reach-a curve, centered so cost(a_curr)=0."""
+    def __init__(self, ds: str, a_curr: float = 0.5, normalize: bool = True):
         d = _load(ds)["ccomp"]
         a = np.asarray(d["a_grid"], float)
-        c = np.maximum.accumulate(np.asarray(d["cost_steps"], float))  # non-decreasing
+        c = np.asarray(d["cost_steps"], float)
+        # enforce non-decreasing (measurement noise can dip); cumulative max
+        c = np.maximum.accumulate(c)
         self.a_min, self.a_max = float(a[0]), float(a[-1])
+        self._a, self._c = a, c
         self.a_curr = a_curr
-        self.smooth = smooth
-        self.r2_fit = float("nan")
-
-        if smooth:
-            # design matrix: [ log-barrier term , linear term ], both centered at a_curr
-            def feats(x):
-                x = np.clip(x, 1e-6, 1 - 1e-6)
-                base = np.log((a_curr * (1 - a_curr)) / (x * (1 - x)))
-                return np.stack([base, (x - a_curr)], axis=-1)
-            X = feats(a)
-            try:
-                from scipy.optimize import nnls
-                coef, _ = nnls(X, c)             # non-negative -> keeps convex+increasing
-            except Exception:
-                coef, *_ = np.linalg.lstsq(X, c, rcond=None)
-                coef = np.maximum(coef, 0.0)
-            self._coef = coef
-            pred = X @ coef
-            ss = float(np.sum((c - pred) ** 2)); tot = float(np.sum((c - c.mean()) ** 2)) + 1e-12
-            self.r2_fit = 1 - ss / tot
-            self._feats = feats
-            self._f = lambda x: (feats(np.asarray(x, float)) @ coef)
-        else:
-            try:
-                from scipy.interpolate import PchipInterpolator
-                self._f = PchipInterpolator(a, c, extrapolate=True)
-            except Exception:
-                self._f = lambda x: np.interp(x, a, c)
-
-        self._c0 = float(np.atleast_1d(self._f(a_curr))[0]) if a_curr >= self.a_min else 0.0
-        cmax = float(np.atleast_1d(self._f(self.a_max))[0])
-        self._scale = (cmax - self._c0) if normalize else 1.0
+        try:
+            from scipy.interpolate import PchipInterpolator
+            self._f = PchipInterpolator(a, c, extrapolate=True)
+        except Exception:                      # fallback: linear interp
+            self._f = lambda x: np.interp(x, a, c)
+        # optional normalization: express cost in units where the max is 1 and
+        # cost(a_curr)=0, so it is comparable across datasets and centered.
+        self._c0 = float(self._f(a_curr)) if a_curr >= self.a_min else 0.0
+        self._scale = (float(c[-1]) - self._c0) if normalize else 1.0
         self._scale = self._scale if abs(self._scale) > 1e-9 else 1.0
 
     def cost(self, a: float) -> float:
         a = float(np.clip(a, self.a_min, self.a_max))
-        raw = float(np.atleast_1d(self._f(a))[0]) - self._c0
+        raw = float(self._f(a)) - self._c0
         return max(raw / self._scale, 0.0)      # >=0, and 0 at a_curr
 
 
